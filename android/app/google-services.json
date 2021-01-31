@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "426842865257",
+    "project_id": "marketmatcher-5ca09",
+    "storage_bucket": "marketmatcher-5ca09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426842865257:android:f6482833a11e8efda76cf8",
+        "android_client_info": {
+          "package_name": "com.pontuswallin.market_matcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426842865257-bo9qb7p9ep6hrecm576vd76q3dfqulqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClkLiyDrnKw4QhmAgfeL2YPCaZX4bdhyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426842865257-bo9qb7p9ep6hrecm576vd76q3dfqulqh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
