@@ -3,7 +3,6 @@ import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:market_matcher/model/Item.dart';
-import 'package:market_matcher/widgets/item_text.dart';
 
 import 'item_list.dart';
 
