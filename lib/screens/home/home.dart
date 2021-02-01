@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:market_matcher/model/Item.dart';
 import 'package:market_matcher/widgets/item_text.dart';
 
+import 'item_list.dart';
+
 class Home extends StatefulWidget {
 
   final AuthService _auth = AuthService();
@@ -39,7 +41,7 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              ItemText()
+              ItemList()
           ],
           ),
         ),
