@@ -13,11 +13,13 @@ class DatabaseService {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
   final Query allItems = FirebaseFirestore.instance.collectionGroup('items');
 
-  Future updateUserData(String name, String password) async {
+  Future updateUserData(String id, String name, String email) async {
     return await userCollection
         .doc(uid)
         .set({
+        'uid' : id,
         'name': name,
+        'email' : email,
     });
   }
 
@@ -30,10 +32,10 @@ class DatabaseService {
   }
 
   void printDoc(QueryDocumentSnapshot doc) {
-    print('description ${doc.data()['description']}');
-    print('location ${doc.data()['location']}');
-    print('name ${doc.data()['name']}');
-    print('price ${doc.data()['price']}');
+    print('description: ${doc.data()['description']}');
+    print('location: ${doc.data()['location']}');
+    print('name: ${doc.data()['name']}');
+    print('price: ${doc.data()['price']}');
   }
 
   // items from snapshot
@@ -43,11 +45,17 @@ class DatabaseService {
 
     return docs.map((doc) {
 
+      double price = 0;
+      if(doc.data()['price'] is int) {
+        int p = doc.data()['price'];
+        price = p.toDouble();
+      }
+
       return Item(
           description: doc.data()['description'] ?? 'no description found',
           location: doc.data()['location'] ?? 'no location found',
           name: doc.data()['name'] ?? 'no name found',
-          price: doc.data()['price'] ?? 0,
+          price: price ?? 0,
       );
     }).toList();
   }
@@ -65,14 +73,27 @@ class DatabaseService {
         .map(_appUserFromSnapshot);
   }
 
+  // get single user
+  AppUser getSingleUser(String uid) {
+
+    return null;//.doc(uid).get();
+
+  }
+
   // add item
-  Future updateItemData(String name, String description, String price, String location) async {
+  Future updateItemData(String name, String description, String price, String location, AppUser user) async {
+
+    Map<String,Object> userMap = {
+      'uid' : user.uid,
+      'username' : user.userName
+    };
 
     Map<String, Object> map = {
       'name' : name,
       'description' : description,
       'price' : double.parse(price),
-      'location' : location
+      'location' : location,
+      'author' : userMap
     };
 
     return await userCollection

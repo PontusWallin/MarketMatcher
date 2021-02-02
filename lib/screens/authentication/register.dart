@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/authentication/user_credentials_form.dart';
 import 'package:market_matcher/services/authentication.dart';
 
 class Register extends StatefulWidget {
@@ -19,6 +18,7 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
+  String name = '';
   String email = '';
   String password = '';
   String error = '';
@@ -47,9 +47,20 @@ class _RegisterState extends State<Register> {
           child: Column(
             children: [
 
+              // User Name text field
+              SizedBox(height: 20.0),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Username'),
+                validator: (val) => val.isEmpty ? 'Please enter a username' : null,
+                onChanged: (val) {
+                  setState(() => name = val);
+                },
+              ),
+
               // Email text field
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: InputDecoration(labelText: 'E-mail'),
                 validator: (val) => val.isEmpty ? 'Please enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
@@ -60,6 +71,7 @@ class _RegisterState extends State<Register> {
               SizedBox(height: 20.0),
               TextFormField(
                 obscureText: true,
+                decoration: InputDecoration(labelText: 'Password'),
                 validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
                 onChanged: (val) {
                   setState(() => password = val);
@@ -77,7 +89,7 @@ class _RegisterState extends State<Register> {
                   if(_formKey.currentState.validate()) {
                     setState(() => loading = true);
 
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    dynamic result = await _auth.registerWithEmailAndPassword(name, email, password);
 
                     // This part returns the result from server side validation.
                     if(result == null) {

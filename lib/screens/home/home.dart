@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:market_matcher/screens/create_item/create_item.dart';
+import 'package:market_matcher/screens/profile/profile.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,7 @@ import 'package:market_matcher/model/Item.dart';
 import 'item_list.dart';
 
 class Home extends StatefulWidget {
+
 
   final AuthService _auth = AuthService();
 
@@ -18,6 +21,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Item>>.value(
@@ -44,7 +50,46 @@ class _HomeState extends State<Home> {
           ],
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add_circle_outline_sharp),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateItems()),
+            );
+          },
+        ),
+        // TODO refactor this, so it's a shared widget
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.blue[500],
+          items: const <BottomNavigationBarItem> [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_box),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.yellow[500],
+          onTap: (index) {
+            setState(() {
+
+              _selectedIndex = index;
+
+              if(_selectedIndex == 1) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile()),
+                );
+              }
+            });
+          },
+        ),
       ),
     );
   }
 }
+

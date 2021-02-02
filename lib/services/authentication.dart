@@ -7,10 +7,12 @@ import 'database.dart';
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   // create user obj based on User type returned from Firebase
   AppUser _appUserFromFirebaseUser(User user) {
-    return user != null ? AppUser(uid: user.uid , userName: 'dummy name') : null;
+
+
+    // TODO fetch the user from cloud firestore. So we can recreate the user here
+    return user != null ? AppUser(uid: user.uid , userName: 'dummy name', email: 'email@email.com') : null;
   }
 
   // auth change user stream
@@ -23,20 +25,19 @@ class AuthService {
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       User user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
-      AppUser appUser = _appUserFromFirebaseUser(user);
-      Cache.user = appUser;
-      return appUser;
+      Cache.user = _appUserFromFirebaseUser(user);
+      return Cache.user;
     } catch(e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String name, String email, String password) async {
     try {
       User user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
-      await DatabaseService(uid: user.uid).updateUserData('Dummy user name', 'dummy password');
+      await DatabaseService(uid: user.uid).updateUserData(user.uid, name, email);
       return _appUserFromFirebaseUser(user);
 
     } catch(e) {

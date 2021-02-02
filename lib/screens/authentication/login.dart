@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/authentication/user_credentials_form.dart';
 import 'package:market_matcher/services/authentication.dart';
 
 class Login extends StatefulWidget {
@@ -50,6 +49,7 @@ class _LoginState extends State<Login> {
               // Email text field
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: InputDecoration(labelText: 'E-mail'),
                 validator: (val) => val.isEmpty ? 'Please enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
@@ -60,6 +60,7 @@ class _LoginState extends State<Login> {
               SizedBox(height: 20.0),
               TextFormField(
                 obscureText: true,
+                decoration: InputDecoration(labelText: 'Password'),
                 validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
                 onChanged: (val) {
                   setState(() => password = val);
@@ -76,7 +77,6 @@ class _LoginState extends State<Login> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()) {
                     setState(() => loading = true);
-                    //TODO: implement Authorizations class
 
                     dynamic result = await _auth.signInWithEmailAndPassword(email, password);
 

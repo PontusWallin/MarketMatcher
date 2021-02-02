@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:market_matcher/model/AppUser.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
+import 'package:market_matcher/util/Cache.dart';
 
 class CreateItems extends StatefulWidget {
 
@@ -50,6 +52,7 @@ class _CreateItemsState extends State<CreateItems> {
               // Name text field
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: InputDecoration(labelText: 'Name'),
                 validator: (val) => val.isEmpty ? 'Please enter an item name' : null,
                 onChanged: (val) {
                   setState(() => name = val);
@@ -59,6 +62,7 @@ class _CreateItemsState extends State<CreateItems> {
               // Description text field
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: InputDecoration(labelText: 'Description'),
                 onChanged: (val) {
                   setState(() => description = val);
                 },
@@ -67,6 +71,7 @@ class _CreateItemsState extends State<CreateItems> {
               // price text field
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: InputDecoration(labelText: 'Price'),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 // TODO verify that only numbers are typed here
                 validator: (val) => val.isEmpty ? 'Please enter a price' : null,
@@ -78,6 +83,7 @@ class _CreateItemsState extends State<CreateItems> {
               // Location text field
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: InputDecoration(labelText: 'Location'),
                 onChanged: (val) {
                   setState(() => location = val);
                 },
@@ -95,14 +101,19 @@ class _CreateItemsState extends State<CreateItems> {
                     setState(() => loading = true);
 
                     Fluttertoast.showToast(msg: 'Uploading');
-                    dynamic result = await widget._database.updateItemData(name, description, price, location);
+                    AppUser user = Cache.user;
+                    dynamic result = await widget._database.updateItemData(name, description, price, location, user);
 
                     // This part returns the result from server side validation.
                     if(result == null) {
                       setState(() {
-                        error = 'Something went wrong, change your data or wait, and try again.';
+                        error = 'Something went wrong. Change your data or wait and try again.';
                         loading = false;
                       });
+                    }else {
+                      Navigator.pop(
+                        context,
+                      );
                     }
                   }
                 },
@@ -117,6 +128,14 @@ class _CreateItemsState extends State<CreateItems> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.home),
+        onPressed: () {
+          Navigator.pop(
+            context,
+          );
+        },
       ),
     );
   }
