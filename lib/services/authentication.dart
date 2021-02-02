@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:market_matcher/model/AppUser.dart';
+import 'package:market_matcher/util/Cache.dart';
 import 'database.dart';
 
 
@@ -9,7 +10,7 @@ class AuthService {
 
   // create user obj based on User type returned from Firebase
   AppUser _appUserFromFirebaseUser(User user) {
-    return user != null ? AppUser(/*uid: user.uid ,*/ userName: 'dummy name') : null;
+    return user != null ? AppUser(uid: user.uid , userName: 'dummy name') : null;
   }
 
   // auth change user stream
@@ -22,7 +23,9 @@ class AuthService {
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       User user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
-      return _appUserFromFirebaseUser(user);
+      AppUser appUser = _appUserFromFirebaseUser(user);
+      Cache.user = appUser;
+      return appUser;
     } catch(e) {
       print(e.toString());
       return null;

@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:market_matcher/model/AppUser.dart';
 import 'package:market_matcher/model/Item.dart';
+import 'package:market_matcher/util/Cache.dart';
 
 class DatabaseService {
 
@@ -21,8 +24,16 @@ class DatabaseService {
   // userDatas from snapshot
   AppUser _appUserFromSnapshot(DocumentSnapshot snapshot){
     return AppUser(
+        uid: snapshot.data()['uid'],
         userName: snapshot.data()['name']
     );
+  }
+
+  void printDoc(QueryDocumentSnapshot doc) {
+    print('description ${doc.data()['description']}');
+    print('location ${doc.data()['location']}');
+    print('name ${doc.data()['name']}');
+    print('price ${doc.data()['price']}');
   }
 
   // items from snapshot
@@ -31,6 +42,7 @@ class DatabaseService {
     List<QueryDocumentSnapshot> docs = snapshot.docs;
 
     return docs.map((doc) {
+
       return Item(
           description: doc.data()['description'] ?? 'no description found',
           location: doc.data()['location'] ?? 'no location found',
@@ -51,5 +63,19 @@ class DatabaseService {
   Stream<AppUser> get userDatas {
     return userCollection.doc(uid).snapshots()
         .map(_appUserFromSnapshot);
+  }
+
+  // add item
+  Future updateItemData(String name, String description, String price, String location) async {
+
+    Map<String, Object> map = {
+      'name' : name,
+      'description' : description,
+      'price' : double.parse(price),
+      'location' : location
+    };
+
+    return await userCollection
+        .doc(Cache.user.uid).collection('items').add(map);
   }
 }

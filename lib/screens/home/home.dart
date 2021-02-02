@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Market Matcher'),
-          elevation: 0.0,
+          elevation: 8.0,
           actions: [
             FlatButton.icon(
                 onPressed: () async {

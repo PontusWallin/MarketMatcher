@@ -16,12 +16,14 @@ class _ItemListState extends State<ItemList> {
 
     final List<Item> items = Provider.of<List<Item>>(context) ?? [];
 
-    return ListView.builder(
-        itemCount: items.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-        return ItemTile(items[index]);
-      },
+    return Expanded(
+      child: ListView.builder(
+          itemCount: items.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+          return ItemTile(items[index]);
+        },
+      ),
     );
   }
 }
