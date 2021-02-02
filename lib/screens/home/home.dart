@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market_matcher/screens/create_item/create_item.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,15 @@ class _HomeState extends State<Home> {
               ItemList()
           ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add_circle_outline_sharp),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateItems()),
+            );
+          },
         ),
       ),
     );
