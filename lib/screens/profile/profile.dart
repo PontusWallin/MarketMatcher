@@ -64,7 +64,6 @@ class _ProfileState extends State<Profile> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  Fluttertoast.showToast(msg: 'Update data placeholder message');
 
                   AppUser user = Cache.user;
 
