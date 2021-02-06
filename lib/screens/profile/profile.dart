@@ -8,14 +8,16 @@ class Profile extends StatefulWidget {
 
   final DatabaseService _database = DatabaseService();
 
+
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
 
-  String name = '';
-  String email = '';
+  AppUser cachedUser = Cache.user;
+  String name = Cache.user.userName;
+  String email = Cache.user.email;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,11 @@ class _ProfileState extends State<Profile> {
               // User Name text field
               SizedBox(height: 20.0),
               TextFormField(
+                initialValue: cachedUser.userName,
                 decoration: InputDecoration(
                     fillColor: Colors.green[100],
                     filled: true,
-                    labelText: 'Username'
+                    labelText: 'Username',
                 ),
                 validator: (val) => val.isEmpty ? 'Please enter a username' : null,
                 onChanged: (val) {
@@ -49,6 +52,7 @@ class _ProfileState extends State<Profile> {
               // Email text field
               SizedBox(height: 20.0),
               TextFormField(
+                initialValue: cachedUser.email,
                 decoration: InputDecoration(labelText: 'E-mail'),
                 validator: (val) => val.isEmpty ? 'Please enter an email' : null,
                 onChanged: (val) {
@@ -65,15 +69,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 onPressed: () async {
 
-                  AppUser user = Cache.user;
-
-                  // Creating some dummy data
-                  user = AppUser(
-                      uid: '111222333',
-                      userName: name,
-                      email: email);
-
-                  dynamic result = await widget._database.updateUserData(user.uid, user.userName, user.email);
+                  Cache.user.userName = name;
+                  Cache.user.email = email;
+                  dynamic result = await widget._database.updateUserData(cachedUser.uid, cachedUser.userName, cachedUser.email);
 
                   // This part returns the result from server side validation.
                   if(result == null) {

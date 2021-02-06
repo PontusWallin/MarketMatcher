@@ -1,8 +1,8 @@
 class AppUser {
 
   final String uid;
-  final String userName;
-  final String email;
+  String userName;
+  String email;
   int score = 0;
 
   AppUser({this.uid, this.userName, this.email});

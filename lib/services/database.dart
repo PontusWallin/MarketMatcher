@@ -45,10 +45,12 @@ class DatabaseService {
 
     return docs.map((doc) {
 
-      double price = 0;
+      double price = 99;
       if(doc.data()['price'] is int) {
         int p = doc.data()['price'];
         price = p.toDouble();
+      } else {
+        price = doc.data()['price'];
       }
 
       return Item(
