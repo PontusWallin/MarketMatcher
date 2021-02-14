@@ -27,18 +27,7 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       backgroundColor: Colors.green[300],
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        actions: [
-          FlatButton.icon(
-            onPressed: () {
-              widget.toggleView();
-            },
-            icon: Icon(Icons.app_registration),
-            label: Text('Registration'),
-          )
-        ],
-      ),
+      appBar: buildLoginPageAppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         child: Form(
@@ -46,26 +35,11 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
 
-              // Email text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'E-mail'),
-                validator: (val) => val.isEmpty ? 'Please enter an email' : null,
-                onChanged: (val) {
-                  setState(() => email = val);
-                },
-              ),
+              buildEmailTextFormField(),
 
-              // Password text field
               SizedBox(height: 20.0),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'Password'),
-                validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
-                onChanged: (val) {
-                  setState(() => password = val);
-                },
-              ),
+              buildPasswordTextFormField(),
 
               // Register button
               RaisedButton(
@@ -91,16 +65,55 @@ class _LoginState extends State<Login> {
                 },
               ),
 
-              // Text field for error from server side validation.
               SizedBox(height: 20.0),
-              Text(
-                  error,
-                  style: TextStyle(color: Colors.red, fontSize: 14.0)
-              ),
+              buildErrorTextArea(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  AppBar buildLoginPageAppBar() {
+    return AppBar(
+      backgroundColor: Colors.green,
+      actions: [
+        FlatButton.icon(
+          onPressed: () {
+            widget.toggleView();
+          },
+          icon: Icon(Icons.app_registration),
+          label: Text('Registration'),
+        )
+      ],
+    );
+  }
+
+  Text buildErrorTextArea() {
+    return Text(
+                error,
+                style: TextStyle(color: Colors.red, fontSize: 14.0)
+            );
+  }
+
+  TextFormField buildPasswordTextFormField() {
+    return TextFormField(
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'Password'),
+              validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
+              onChanged: (val) {
+                setState(() => password = val);
+              },
+            );
+  }
+
+  TextFormField buildEmailTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'E-mail'),
+              validator: (val) => val.isEmpty ? 'Please enter an email' : null,
+              onChanged: (val) {
+                setState(() => email = val);
+              },
+            );
   }
 }

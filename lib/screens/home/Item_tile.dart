@@ -14,34 +14,49 @@ class ItemTile extends StatelessWidget {
 
       child: ListTile(
 
-        leading: CircleAvatar(
-          backgroundColor: Colors.yellow,
-          backgroundImage: AssetImage('assets/exchange.png'),
-        ),
-
-        title: Text(
-          '${item.price}€',
-          textScaleFactor: 1.5
-        ),
-        subtitle: Text(
-            item.name,
-            textScaleFactor: 1.33
-        ),
+        leading: buildImageAvatar(),
+        title: buildPriceText(),
+        subtitle: buildNameText(),
 
         trailing: Icon(Icons.keyboard_arrow_right),
 
         onTap: (){
-          Fluttertoast.showToast(
-              msg: "Go to a single add screen",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
+          goToSingleItemScreen();
         },
       )
     );
+  }
+
+  void goToSingleItemScreen() {
+    Fluttertoast.showToast(
+        msg: "Go to a single add screen",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+  }
+
+  Text buildNameText() {
+    return Text(
+          item.name,
+          textScaleFactor: 1.33
+      );
+  }
+
+  Text buildPriceText() {
+    return Text(
+        '${item.price}€',
+        textScaleFactor: 1.5
+      );
+  }
+
+  CircleAvatar buildImageAvatar() {
+    return CircleAvatar(
+        backgroundColor: Colors.yellow,
+        backgroundImage: AssetImage('assets/exchange.png'),
+      );
   }
 }

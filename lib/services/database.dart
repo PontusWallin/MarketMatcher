@@ -78,8 +78,7 @@ class DatabaseService {
   // get single user
   AppUser getSingleUser(String uid) {
 
-    return null;//.doc(uid).get();
-
+    //return userCollection.doc(uid).get();
   }
 
   // add item

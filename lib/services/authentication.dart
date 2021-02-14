@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:market_matcher/model/AppUser.dart';
 import 'package:market_matcher/util/Cache.dart';
+import 'package:market_matcher/util/DebugUtilities.dart';
+import 'package:market_matcher/util/shared_preferences/preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'database.dart';
 
 
@@ -11,7 +14,10 @@ class AuthService {
   AppUser _appUserFromFirebaseUser(User user) {
 
 
-    // TODO fetch the user from cloud firestore. So we can recreate the user here
+    // Fetch the user data from the database, so we can store the users name in SharedPreferences.
+    DatabaseService db = new DatabaseService();
+    Stream<AppUser> appUserStream = db.userDatas;
+
     return user != null ? AppUser(uid: user.uid , userName: 'dummy name', email: 'email@email.com') : null;
   }
 
@@ -20,13 +26,25 @@ class AuthService {
     return _auth.authStateChanges()
         .map(_appUserFromFirebaseUser);
   }
-
-  // Sign in with email & password
+  
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       User user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
+
+      AppUser appUser = new AppUser(
+          uid: user.uid,
+          email: email,
+          userName: 'name'
+      );
+
+      Preferences.loadUserIntoPrefs(appUser);
+      Preferences.loadPrefsToCache();
+      DebugUtilities().printUserPrefs();
+
       Cache.user = _appUserFromFirebaseUser(user);
+
       return Cache.user;
+
     } catch(e) {
       print(e.toString());
       return null;
@@ -38,6 +56,17 @@ class AuthService {
       User user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
       await DatabaseService(uid: user.uid).updateUserData(user.uid, name, email);
+
+      AppUser appUser = new AppUser(
+          uid: user.uid,
+          email: email,
+          userName: name
+      );
+
+      Preferences.loadUserIntoPrefs(appUser);
+      Preferences.loadPrefsToCache();
+      DebugUtilities().printUserPrefs();
+
       return _appUserFromFirebaseUser(user);
 
     } catch(e) {

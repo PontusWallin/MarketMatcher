@@ -47,36 +47,14 @@ class _RegisterState extends State<Register> {
           child: Column(
             children: [
 
-              // User Name text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Username'),
-                validator: (val) => val.isEmpty ? 'Please enter a username' : null,
-                onChanged: (val) {
-                  setState(() => name = val);
-                },
-              ),
+              buildUserNameTextFormField(),
 
-              // Email text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'E-mail'),
-                validator: (val) => val.isEmpty ? 'Please enter an email' : null,
-                onChanged: (val) {
-                  setState(() => email = val);
-                },
-              ),
+              buildEmailTextFormField(),
 
-              // Password text field
               SizedBox(height: 20.0),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'Password'),
-                validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
-                onChanged: (val) {
-                  setState(() => password = val);
-                },
-              ),
+              buildPasswordTextFormField(),
 
               // Register button
               RaisedButton(
@@ -102,16 +80,50 @@ class _RegisterState extends State<Register> {
                 },
               ),
 
-              // Text field for error from server side validation.
               SizedBox(height: 20.0),
-              Text(
-                  error,
-                  style: TextStyle(color: Colors.red, fontSize: 14.0)
-              ),
+              buildErrorTextArea(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Text buildErrorTextArea() {
+    return Text(
+                error,
+                style: TextStyle(color: Colors.red, fontSize: 14.0)
+            );
+  }
+
+  TextFormField buildPasswordTextFormField() {
+    return TextFormField(
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'Password'),
+              validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
+              onChanged: (val) {
+                setState(() => password = val);
+              },
+            );
+  }
+
+  TextFormField buildEmailTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'E-mail'),
+              validator: (val) => val.isEmpty ? 'Please enter an email' : null,
+              onChanged: (val) {
+                setState(() => email = val);
+              },
+            );
+  }
+
+  TextFormField buildUserNameTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'Username'),
+              validator: (val) => val.isEmpty ? 'Please enter a username' : null,
+              onChanged: (val) {
+                setState(() => name = val);
+              },
+            );
   }
 }

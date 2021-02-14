@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:market_matcher/model/AppUser.dart';
 import 'package:market_matcher/services/database.dart';
 import 'package:market_matcher/util/Cache.dart';
@@ -23,10 +22,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green[300],
-      appBar: AppBar(
-        title: Text('Profile'),
-        backgroundColor: Colors.green,
-      ),
+      appBar: buildProfileAppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         child: Form(
@@ -34,31 +30,11 @@ class _ProfileState extends State<Profile> {
           child: Column(
             children: [
 
-              // User Name text field
               SizedBox(height: 20.0),
-              TextFormField(
-                initialValue: cachedUser.userName,
-                decoration: InputDecoration(
-                    fillColor: Colors.green[100],
-                    filled: true,
-                    labelText: 'Username',
-                ),
-                validator: (val) => val.isEmpty ? 'Please enter a username' : null,
-                onChanged: (val) {
-                  setState(() => name = val);
-                },
-              ),
+              buildNameTextFormField(),
 
-              // Email text field
               SizedBox(height: 20.0),
-              TextFormField(
-                initialValue: cachedUser.email,
-                decoration: InputDecoration(labelText: 'E-mail'),
-                validator: (val) => val.isEmpty ? 'Please enter an email' : null,
-                onChanged: (val) {
-                  setState(() => email = val);
-                },
-              ),
+              buildEmailTextFormField(),
 
               // Register button
               RaisedButton(
@@ -91,5 +67,38 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  AppBar buildProfileAppBar() {
+    return AppBar(
+      title: Text('Profile'),
+      backgroundColor: Colors.green,
+    );
+  }
+
+  TextFormField buildEmailTextFormField() {
+    return TextFormField(
+              initialValue: cachedUser.email,
+              decoration: InputDecoration(labelText: 'E-mail'),
+              validator: (val) => val.isEmpty ? 'Please enter an email' : null,
+              onChanged: (val) {
+                setState(() => email = val);
+              },
+            );
+  }
+
+  TextFormField buildNameTextFormField() {
+    return TextFormField(
+              initialValue: cachedUser.userName,
+              decoration: InputDecoration(
+                  fillColor: Colors.green[100],
+                  filled: true,
+                  labelText: 'Username',
+              ),
+              validator: (val) => val.isEmpty ? 'Please enter a username' : null,
+              onChanged: (val) {
+                setState(() => name = val);
+              },
+            );
   }
 }

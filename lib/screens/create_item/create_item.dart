@@ -5,6 +5,7 @@ import 'package:market_matcher/model/AppUser.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
 import 'package:market_matcher/util/Cache.dart';
+import 'package:market_matcher/util/shared_preferences/preferences.dart';
 
 class CreateItems extends StatefulWidget {
 
@@ -49,45 +50,17 @@ class _CreateItemsState extends State<CreateItems> {
           child: Column(
             children: [
 
-              // Name text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Name'),
-                validator: (val) => val.isEmpty ? 'Please enter an item name' : null,
-                onChanged: (val) {
-                  setState(() => name = val);
-                },
-              ),
+              buildNameTextFormField(),
 
-              // Description text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
-                onChanged: (val) {
-                  setState(() => description = val);
-                },
-              ),
+              buildDescriptionTextFormField(),
 
-              // price text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Price'),
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                // TODO verify that only numbers are typed here
-                validator: (val) => val.isEmpty ? 'Please enter a price' : null,
-                onChanged: (val) {
-                  setState(() => price = val);
-                },
-              ),
+              buildPriceTextFormField(),
 
-              // Location text field
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Location'),
-                onChanged: (val) {
-                  setState(() => location = val);
-                },
-              ),
+              buildLocationTextFormField(),
 
               // Add Item button
               RaisedButton(
@@ -101,10 +74,15 @@ class _CreateItemsState extends State<CreateItems> {
                     setState(() => loading = true);
 
                     Fluttertoast.showToast(msg: 'Uploading');
-                    AppUser user = Cache.user;
-                    dynamic result = await widget._database.updateItemData(name, description, price, location, user);
+                    Future<AppUser> user = Preferences.loadAppUserFromPrefs();
+                    dynamic result = await widget._database.updateItemData(
+                        name,
+                        description,
+                        price,
+                        location,
+                        Cache.user);
 
-                    // This part returns the result from server side validation.
+                    //This part returns the result from server side validation.
                     if(result == null) {
                       setState(() {
                         error = 'Something went wrong. Change your data or wait and try again.';
@@ -119,24 +97,71 @@ class _CreateItemsState extends State<CreateItems> {
                 },
               ),
 
-              // Text field for error from server side validation.
               SizedBox(height: 20.0),
-              Text(
-                  error,
-                  style: TextStyle(color: Colors.red, fontSize: 14.0)
-              ),
+              buildErrorTextArea(),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.home),
-        onPressed: () {
-          Navigator.pop(
-            context,
-          );
-        },
-      ),
+      floatingActionButton: buildHomeFAB(context),
     );
+  }
+
+  FloatingActionButton buildHomeFAB(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.home),
+      onPressed: () {
+        Navigator.pop(
+          context,
+        );
+      },
+    );
+  }
+
+  Text buildErrorTextArea() {
+    return Text(
+                error,
+                style: TextStyle(color: Colors.red, fontSize: 14.0)
+            );
+  }
+
+  TextFormField buildLocationTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'Location'),
+              onChanged: (val) {
+                setState(() => location = val);
+              },
+            );
+  }
+
+  TextFormField buildPriceTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'Price'),
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              // TODO verify that only numbers are typed here
+              validator: (val) => val.isEmpty ? 'Please enter a price' : null,
+              onChanged: (val) {
+                setState(() => price = val);
+              },
+            );
+  }
+
+  TextFormField buildDescriptionTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'Description'),
+              onChanged: (val) {
+                setState(() => description = val);
+              },
+            );
+  }
+
+  TextFormField buildNameTextFormField() {
+    return TextFormField(
+              decoration: InputDecoration(labelText: 'Name'),
+              validator: (val) => val.isEmpty ? 'Please enter an item name' : null,
+              onChanged: (val) {
+                setState(() => name = val);
+              },
+            );
   }
 }
