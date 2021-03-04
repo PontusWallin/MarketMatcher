@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/authentication/login.dart';
+import 'package:market_matcher/screens/authentication/login_old.dart';
+import 'package:market_matcher/screens/authentication/login_page_w_bloc.dart';
 import 'package:market_matcher/screens/authentication/register.dart';
+import 'package:market_matcher/services/authentication.dart';
+import 'package:provider/provider.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -17,10 +20,11 @@ class _AuthenticateState extends State<Authenticate> {
 
   @override
   Widget build(BuildContext context) {
+
     if(showSignIn) {
-      return Login(toggleView: toggleView);
+      return LoginPage.create(context);
     } else {
-      return Register(toggleView: toggleView);
+      return LoginPage.create(context);
     }
   }
 }

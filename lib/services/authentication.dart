@@ -9,7 +9,7 @@ import 'database.dart';
 
 class AuthService {
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   // create user obj based on User type returned from Firebase
   AppUser _appUserFromFirebaseUser(User user) {
 
@@ -21,15 +21,18 @@ class AuthService {
     return user != null ? AppUser(uid: user.uid , userName: 'dummy name', email: 'email@email.com') : null;
   }
 
+  @override
+  Stream<User> authStateChanges() => _firebaseAuth.authStateChanges();
+
   // auth change user stream
   Stream<AppUser> get user {
-    return _auth.authStateChanges()
+    return _firebaseAuth.authStateChanges()
         .map(_appUserFromFirebaseUser);
   }
   
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future<AppUser> signInWithEmailAndPassword(String email, String password) async {
     try {
-      User user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
+      User user = (await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password)).user;
 
       AppUser appUser = new AppUser(
           uid: user.uid,
@@ -47,13 +50,13 @@ class AuthService {
 
     } catch(e) {
       print(e.toString());
-      return null;
+      throw e;
     }
   }
 
   Future registerWithEmailAndPassword(String name, String email, String password) async {
     try {
-      User user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
+      User user = (await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
       await DatabaseService(uid: user.uid).updateUserData(user.uid, name, email);
 
@@ -77,7 +80,7 @@ class AuthService {
 
   Future signOut() async {
     try {
-      return await _auth.signOut();
+      return await _firebaseAuth.signOut();
     }catch(e) {
       print(e.toString());
       return null;
