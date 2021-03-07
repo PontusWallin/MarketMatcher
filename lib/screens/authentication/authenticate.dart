@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/authentication/login_old.dart';
-import 'package:market_matcher/screens/authentication/login_page_w_bloc.dart';
-import 'package:market_matcher/screens/authentication/register.dart';
-import 'package:market_matcher/services/authentication.dart';
-import 'package:provider/provider.dart';
+import 'file:///C:/Users/Pontus/StudioProjects/market_matcher/lib/screens/authentication/login_page/login_page.dart';
+import 'package:market_matcher/screens/authentication/register_page/register_page.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -24,7 +21,7 @@ class _AuthenticateState extends State<Authenticate> {
     if(showSignIn) {
       return LoginPage.create(context);
     } else {
-      return LoginPage.create(context);
+      return RegisterPage.create(context);
     }
   }
 }

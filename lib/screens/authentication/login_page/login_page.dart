@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/authentication/login_bloc.dart';
-import 'package:market_matcher/screens/authentication/login_model.dart';
+import 'file:///C:/Users/Pontus/StudioProjects/market_matcher/lib/screens/authentication/login_page/login_bloc.dart';
+import 'file:///C:/Users/Pontus/StudioProjects/market_matcher/lib/screens/authentication/login_page/login_model.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/util/AlertDialogBuilder.dart';
 import 'package:provider/provider.dart';
 
+enum EmailSignInFormType  {
+  signIn, register
+}
+
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key key, this.toggleView, this.bloc}) : super(key: key);
+  LoginPage({Key key, this.toggleView, this.bloc}) : super(key: key);
   final LogInBloc bloc;
 
   static Widget create(BuildContext context) {
@@ -14,7 +18,7 @@ class LoginPage extends StatefulWidget {
     return Provider<LogInBloc>(
       create: (_) => LogInBloc(auth: auth),
       child: Consumer<LogInBloc>(
-        builder: (_, bloc, __) => LoginPage(bloc: bloc),
+        builder: (_, bloc, __) => LoginPage(bloc: bloc, toggleView: () =>{}),
       ),
       dispose: (_, bloc) => bloc.dispose(),
     );
@@ -28,13 +32,19 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  EmailSignInFormType _formType = EmailSignInFormType.signIn;
   final _formKey = LogInBloc().formKey;
 
   @override
   Widget build(BuildContext context) {
+    final String AppBarLabel = _formType == EmailSignInFormType.signIn ? 'Sign in' : 'Create an account';
+    final secondaryText = _formType == EmailSignInFormType.signIn ? 'Need an account? Register' : 'Have an account? Sign in';
     return Scaffold(
       backgroundColor: Colors.green[300],
-      appBar: buildLoginPageAppBar(),
+      appBar: buildLoginPageAppBar(secondaryText),
       body: StreamBuilder<LogInModel>(
           stream: widget.bloc.modelStream,
           initialData: LogInModel(),
@@ -83,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  AppBar buildLoginPageAppBar() {
+  AppBar buildLoginPageAppBar(String label) {
     return AppBar(
       backgroundColor: Colors.green,
       actions: [
@@ -92,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
             widget.toggleView();
           },
           icon: Icon(Icons.app_registration),
-          label: Text('Registration'),
+          label: Text(label),
         )
       ],
     );
@@ -100,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildPasswordTextFormField() {
     return TextFormField(
+      controller: _passwordController,
       obscureText: true,
       decoration: InputDecoration(labelText: 'Password'),
       validator: (val) =>
@@ -112,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildEmailTextFormField() {
     return TextFormField(
+      controller: _emailController,
       decoration: InputDecoration(labelText: 'E-mail'),
       validator: (val) => val.isEmpty ? 'Please enter an email' : null,
       onChanged: (val) {

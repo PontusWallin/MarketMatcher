@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:market_matcher/screens/authentication/register_page/register_bloc.dart';
 import 'package:market_matcher/services/authentication.dart';
+import 'package:provider/provider.dart';
 
-class Register extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
+
+  const RegisterPage({Key key, this.toggleView, this.bloc}) : super(key: key);
+  final RegisterBloc bloc;
+
+  static Widget create(BuildContext context) {
+    final auth = Provider.of<AuthService>(context, listen: false);
+    return Provider<RegisterBloc>(
+      create: (_) => RegisterBloc(auth: auth),
+      child: Consumer<RegisterBloc>(
+        builder: (_, bloc, __) => RegisterPage(bloc: bloc, toggleView: () =>{}),
+      ),
+      dispose: (_, bloc) => bloc.dispose(),
+    );
+  }
 
   final Function toggleView;
 
-  const Register({Key key, this.toggleView}) : super(key: key);
-
   @override
-  _RegisterState createState() => _RegisterState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterPageState extends State<RegisterPage> {
 
-  final AuthService _auth = AuthService();
-
-  final _formKey = GlobalKey<FormState>();
-  bool loading = false;
-
-  String name = '';
-  String email = '';
-  String password = '';
-  String error = '';
+  final _formKey = RegisterBloc().formKey;
 
   @override
   Widget build(BuildContext context) {
@@ -65,35 +71,15 @@ class _RegisterState extends State<Register> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()) {
-                    setState(() => loading = true);
-
-                    dynamic result = await _auth.registerWithEmailAndPassword(name, email, password);
-
-                    // This part returns the result from server side validation.
-                    if(result == null) {
-                      setState(() {
-                        error = 'Please supply a valid email.';
-                        loading = false;
-                      });
-                    }
+                    widget.bloc.submit(context);
                   }
                 },
               ),
-
-              SizedBox(height: 20.0),
-              buildErrorTextArea(),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Text buildErrorTextArea() {
-    return Text(
-                error,
-                style: TextStyle(color: Colors.red, fontSize: 14.0)
-            );
   }
 
   TextFormField buildPasswordTextFormField() {
@@ -102,7 +88,7 @@ class _RegisterState extends State<Register> {
               decoration: InputDecoration(labelText: 'Password'),
               validator: (val) => val.length < 10 ? 'Passwords must be 10+ characters long' : null,
               onChanged: (val) {
-                setState(() => password = val);
+                widget.bloc.updateWith(password: val);
               },
             );
   }
@@ -112,7 +98,7 @@ class _RegisterState extends State<Register> {
               decoration: InputDecoration(labelText: 'E-mail'),
               validator: (val) => val.isEmpty ? 'Please enter an email' : null,
               onChanged: (val) {
-                setState(() => email = val);
+                widget.bloc.updateWith(email: val);
               },
             );
   }
@@ -122,7 +108,7 @@ class _RegisterState extends State<Register> {
               decoration: InputDecoration(labelText: 'Username'),
               validator: (val) => val.isEmpty ? 'Please enter a username' : null,
               onChanged: (val) {
-                setState(() => name = val);
+                widget.bloc.updateWith(name: val);
               },
             );
   }
