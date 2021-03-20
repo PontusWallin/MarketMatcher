@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:market_matcher/model/AppUser.dart';
-import 'package:market_matcher/screens/authentication/authenticate.dart';
-import 'file:///C:/Users/Pontus/StudioProjects/market_matcher/lib/screens/authentication/login_page/login_page.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:provider/provider.dart';
-
+import 'authentication/AuthenticationPage.dart';
 import 'home/home.dart';
 
 class Wrapper extends StatelessWidget {
@@ -18,7 +16,7 @@ class Wrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           final AppUser user = snapshot.data;
           if (user == null) {
-            return LoginPage.create(context);
+            return AuthenticationPage.create(context);
           }
           return Home();
         }

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:market_matcher/model/AppUser.dart';
 import 'package:market_matcher/screens/wrapper.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +19,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider<AuthService>(
       create: (context) => AuthService(),
-      child: MaterialApp(
-        home: Wrapper(),
-      ),
-    );
-
-      StreamProvider<AppUser>.value(
-      value: AuthService().user,
       child: MaterialApp(
         home: Wrapper(),
       ),
