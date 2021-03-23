@@ -1,15 +1,11 @@
 import 'package:market_matcher/services/authentication.dart';
-
 import 'AuthenticationFormType.dart';
-
-
 
 class SignInState {
 
-  // In the future, we could load this state from a locally safe storage
   final AuthService auth;
 
-  EmailSignInFormType _formType;
+  EmailSignInFormType _formType = EmailSignInFormType.signIn;
   EmailSignInFormType get formType => _formType;
 
   String _userEmail;
@@ -58,5 +54,4 @@ class SignInState {
       rethrow;
     }
   }
-
 }

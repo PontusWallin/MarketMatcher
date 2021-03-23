@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:market_matcher/services/authentication.dart';
 
 class SharedWidgets {
+
+  TextFormField buildNumberFormField({TextEditingController controller, bool obscureText = false,
+    String label, Function validator, Function onChanged}) {
+
+    return TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(labelText: label),
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        validator: validator,
+        onChanged: onChanged
+    );
+  }
 
   TextFormField buildTextFormField({TextEditingController controller, bool obscureText = false,
     String label, Function validator, Function onChanged}) {
@@ -22,7 +39,7 @@ class SharedWidgets {
     ));
   }
 
-  ElevatedButton buildButton(String label, Function onPressed) {
+  ElevatedButton buildButton({String label, Function onPressed}) {
 
     return ElevatedButton(
         child: Text(
@@ -34,16 +51,30 @@ class SharedWidgets {
         });
   }
 
-  AppBar buildAppBar(String label, Icon icon, Function onPressed) {
+  AppBar buildAppBar({String title, String label, Icon icon,Function onPressed}) {
+
+    List<Widget> actionList = <Widget>[];
+    if(label != null && icon != null) {
+      ElevatedButton buttonForAppBar = ElevatedButton.icon(onPressed: onPressed, icon: icon, label: Text(label));
+      actionList.add(buttonForAppBar);
+    }
+
     return AppBar(
       backgroundColor: Colors.blue,
-      actions: [
-        ElevatedButton.icon(
-          onPressed: onPressed,
-          icon: icon,
-          label: Text(label),
-        )
-      ],
+      title: Text(title),
+      elevation: 8.0,
+      actions: actionList
+    );
+  }
+
+  FloatingActionButton buildHomeFAB(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.home),
+      onPressed: () {
+        Navigator.pop(
+          context,
+        );
+      },
     );
   }
 

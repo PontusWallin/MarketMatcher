@@ -19,7 +19,7 @@ class AlertDialogBuilder {
     );
   }
 
-  static void createErrorDialog({String title, Exception exception, BuildContext context}) {
+  static void createErrorDialog({String title, dynamic exception, BuildContext context}) {
         AlertDialogBuilder.createDialog(title: "Error",content: exception.toString(), context: context);
   }
 }

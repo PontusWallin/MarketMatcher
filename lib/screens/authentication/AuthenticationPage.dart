@@ -38,7 +38,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: SharedWidgets().buildAppBar("Toggle", new Icon(Icons.app_registration), toggleView),
+      appBar: SharedWidgets().buildAppBar(title: "Authenticate"),
       body: StateBuilder<SignInState>(
         models: [Injector.getAsReactive<SignInState>()],
         builder: (context, reactiveModel){
@@ -85,11 +85,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
             buildEmailTextFormField(),
             SharedWidgets().sizedBox(),
             buildPasswordTextFormField(),
-            SharedWidgets().buildButton('Login', submit),
+            SharedWidgets().buildButton(label: 'Login', onPressed: submit),
             SharedWidgets().sizedBox(),
             SharedWidgets().sizedBox(),
             Text("Don't have an account yet?"),
-            SharedWidgets().buildButton(" Register one!", toggleView)
+            SharedWidgets().buildButton(label: " Register one!", onPressed: toggleView)
           ],
         ),
       ),
@@ -108,10 +108,10 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
             buildEmailTextFormField(),
             SharedWidgets().sizedBox(),
             buildPasswordTextFormField(),
-            SharedWidgets().buildButton('Register', register),
+            SharedWidgets().buildButton(label: 'Register', onPressed: register),
             SharedWidgets().sizedBox(2),
             Text("Already have an account?"),
-            SharedWidgets().buildButton("Log in instead!", toggleView)
+            SharedWidgets().buildButton(label: "Log in instead!", onPressed: toggleView)
           ],
         ),
       ),

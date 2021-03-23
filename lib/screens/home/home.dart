@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/create_item/create_item.dart';
+import 'package:market_matcher/screens/create_item/CreateItemPage.dart';
 import 'package:market_matcher/screens/profile/profile.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
+import 'package:market_matcher/util/SharedWidgets.dart';
 import 'package:provider/provider.dart';
 import 'package:market_matcher/model/Item.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'item_list.dart';
 
@@ -25,31 +25,23 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
 
+  void logout() async {
+      await widget._auth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Item>>.value(
       value: DatabaseService().items,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Market Matcher'),
-          elevation: 8.0,
-          actions: [
-            FlatButton.icon(
-                onPressed: () async {
-                  await widget._auth.signOut();
-                },
-                icon: Icon(Icons.person),
-                label: Text('logout')
-            ),
-          ], // these will appear as icons in the app bar!
-        ),
+        appBar: SharedWidgets().buildAppBar(title: "Market Matcher", label: "Log out", icon: Icon(Icons.person), onPressed: logout),
         body: buildItemListContainer(),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add_circle_outline_sharp),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CreateItems()),
+              MaterialPageRoute(builder: (context) => CreateItemsPage.create(context)),
             );
           },
         ),

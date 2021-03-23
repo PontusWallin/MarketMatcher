@@ -42,14 +42,12 @@ class AuthService {
 
       Preferences.loadUserIntoPrefs(appUser);
       Preferences.loadPrefsToCache();
-      DebugUtilities().printUserPrefs();
 
       Cache.user = _appUserFromFirebaseUser(user);
 
       return Cache.user;
 
     } catch(e) {
-      print(e.toString());
       throw e;
     }
   }
@@ -68,12 +66,10 @@ class AuthService {
 
       Preferences.loadUserIntoPrefs(appUser);
       Preferences.loadPrefsToCache();
-      DebugUtilities().printUserPrefs();
 
       return _appUserFromFirebaseUser(user);
 
     } catch(e) {
-      print(e.toString());
       throw e;
     }
   }
