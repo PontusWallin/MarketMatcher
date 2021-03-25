@@ -1,5 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
 import 'package:market_matcher/util/Cache.dart';
 

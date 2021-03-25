@@ -43,8 +43,6 @@ class AuthService {
       Preferences.loadUserIntoPrefs(appUser);
       Preferences.loadPrefsToCache();
 
-      Cache.user = _appUserFromFirebaseUser(user);
-
       return Cache.user;
 
     } catch(e) {

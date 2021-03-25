@@ -28,7 +28,6 @@ class Preferences {
 
   }
 
-
   static void loadPrefsToCache() async {
     loadAppUserFromPrefs().then(
             (appUser) =>

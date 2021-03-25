@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:market_matcher/screens/create_item/CreateItemPage.dart';
+import 'package:market_matcher/screens/create_item/create_item_page.dart';
 import 'package:market_matcher/screens/profile/profile.dart';
 import 'package:market_matcher/services/authentication.dart';
 import 'package:market_matcher/services/database.dart';
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CreateItemsPage.create(context)),
+              MaterialPageRoute(builder: (context) => CreateItemPage.create(context)),
             );
           },
         ),
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
             if(_selectedIndex == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Profile()),
+                MaterialPageRoute(builder: (context) => Profile.create(context)),
               );
             }
           });

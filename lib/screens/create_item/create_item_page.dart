@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:market_matcher/model/AppUser.dart';
-import 'package:market_matcher/services/authentication.dart';
-import 'package:market_matcher/services/database.dart';
 import 'package:market_matcher/util/AlertDialogBuilder.dart';
-import 'package:market_matcher/util/Cache.dart';
 import 'package:market_matcher/util/SharedWidgets.dart';
-import 'package:market_matcher/util/shared_preferences/preferences.dart';
-import 'package:provider/provider.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-import 'CreateItemState.dart';
+import 'create_item_state.dart';
 
-class CreateItemsPage extends StatefulWidget {
+class CreateItemPage extends StatefulWidget {
 
   static Widget create(BuildContext context) {
     return Scaffold(
@@ -21,7 +13,7 @@ class CreateItemsPage extends StatefulWidget {
         inject: [
           Inject<CreateItemState>(() => CreateItemState())
         ],
-        builder: (context) => CreateItemsPage(),
+        builder: (context) => CreateItemPage(),
       ),
     );
   }
@@ -30,7 +22,7 @@ class CreateItemsPage extends StatefulWidget {
   _CreateItemsState createState() => _CreateItemsState();
 }
 
-class _CreateItemsState extends State<CreateItemsPage> {
+class _CreateItemsState extends State<CreateItemPage> {
 
   final _formKey = GlobalKey<FormState>();
 
@@ -45,7 +37,7 @@ class _CreateItemsState extends State<CreateItemsPage> {
             return reactiveModel.whenConnectionState(
                 onIdle: () => _buildItemForm(),
                 onWaiting: () => SharedWidgets().buildLoadingPage(),
-                onData: (data) => _buildItemForm(), // Add an "Item Created" - feedback screen thingy?
+                onData: (_) => _returnToHomePage(),
                 onError: (_) => _buildItemForm());
         },
       ),
@@ -53,6 +45,11 @@ class _CreateItemsState extends State<CreateItemsPage> {
     );
   }
 
+  Widget _returnToHomePage() {
+    Navigator.pop(context);
+    return _buildItemForm();
+  }
+  
   Widget _buildItemForm() {
 
     final reactiveModel = Injector.getAsReactive<CreateItemState>();
